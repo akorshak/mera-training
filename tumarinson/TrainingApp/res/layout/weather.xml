@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/weath_town"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#cccccc"
+        android:text="Нижний Новогород"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="5dp"
+        android:textSize="35sp" />
+
+    <ListView
+        android:id="@+id/weatherlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+    
+    
+
+</LinearLayout>

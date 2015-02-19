@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <color name="header_color">#cccccc</color>
+     <color name="list_color">#ffffff</color>
+     <color name="margin_color">#73f4ac</color>
+</resources>

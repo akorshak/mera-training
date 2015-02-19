@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TrainingApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="list_title">Список заданий:</string>
+    <string name="empty">Нет данных</string>
+
+    <string-array name="list_items">
+        <item>ImageView with margin</item>
+        <item>List + ViewHolder</item>
+        <item>Прогноз погоды(XML)</item>
+        <item>Прогноз погоды(JSON)</item>
+        <item>Еще что-то</item>
+    </string-array>
+
+    <string name="title_activity_weather">WeatherActivity</string>
+    <string name="title_activity_weater_activity_json">WeaterActivityJSON</string>
+
+</resources>

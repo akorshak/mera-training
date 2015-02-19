@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+		<TextView
+		    android:id="@+id/weath_date"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginRight="10dp"
+		    android:text="18.02.2015"
+		    android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/weath_weekday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="среда"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/weath_tod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="утро"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/weath_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-7 \u2103"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/weath_cloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="облачно"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/weath_prec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="без осадков"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp" />
+
+</LinearLayout>
