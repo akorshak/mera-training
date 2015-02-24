@@ -37,6 +37,10 @@
             android:name=".WeatherActivityJSON"
             android:label="@string/title_activity_weater_activity_json" >
         </activity>
+        <activity
+            android:name=".GesturesActivity"
+            android:label="@string/title_activity_gestures" >
+        </activity>
     </application>
 
 </manifest>

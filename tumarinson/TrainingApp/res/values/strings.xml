@@ -12,10 +12,12 @@
         <item>List + ViewHolder</item>
         <item>Прогноз погоды(XML)</item>
         <item>Прогноз погоды(JSON)</item>
+        <item>Gestures</item>
         <item>Еще что-то</item>
     </string-array>
 
     <string name="title_activity_weather">WeatherActivity</string>
     <string name="title_activity_weater_activity_json">WeaterActivityJSON</string>
+    <string name="title_activity_gestures">GesturesActivity</string>
 
 </resources>

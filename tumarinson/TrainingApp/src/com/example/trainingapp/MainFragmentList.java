@@ -18,7 +18,8 @@ public class MainFragmentList extends ListFragment {
 			ImageViewActivity.class,
 			ViewHolderActivity.class,
 			WeatherActivity.class,
-			WeatherActivityJSON.class};
+			WeatherActivityJSON.class,
+			GesturesActivity.class};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
