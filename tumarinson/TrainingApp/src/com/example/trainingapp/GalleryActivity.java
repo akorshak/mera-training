@@ -32,13 +32,12 @@ import android.widget.Toast;
 
 public class GalleryActivity extends Activity implements OnClickListener{
 
-	private final String IMG_FOLDER = "images";
+	private static final String IMG_FOLDER = "images";
 	private ImagePagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	private Button prevButton;
 	private Button nextButton;
 	
-	//private int images[] = {R.drawable.img1, R.drawable.img2, R.drawable.img3, R.drawable.img4};
 	private ArrayList<Bitmap> imageArray=new ArrayList<Bitmap>();
 
 	@Override
@@ -63,7 +62,6 @@ public class GalleryActivity extends Activity implements OnClickListener{
 			}
 		}
 		
-
 		mSectionsPagerAdapter = new ImagePagerAdapter(getFragmentManager());
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -108,7 +106,6 @@ public class GalleryActivity extends Activity implements OnClickListener{
 			mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
 			break;
 		}
-		
 	}
 	
 	/**
@@ -165,7 +162,4 @@ public class GalleryActivity extends Activity implements OnClickListener{
 			return rootView;
 		}
 	}
-
-
-
 }
