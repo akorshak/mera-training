@@ -15,11 +15,11 @@
         <item>Gestures</item>
         <item>Dial action</item>
         <item>Галлерея</item>
+        <item>Sensor orientation</item>
     </string-array>
 
     <string name="dial_title">Название asset файла, содержащего телефонный номер:</string>
     <string name="dial_but">Вызвать dialer</string>
-    
     <string name="title_activity_weather">WeatherActivity</string>
     <string name="title_activity_weater_activity_json">WeaterActivityJSON</string>
     <string name="title_activity_gestures">GesturesActivity</string>
@@ -29,5 +29,7 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_gal">GalActivity</string>
+    <string name="title_activity_gravity_accelerate">GravityAccelerateActivity</string>
+    <string name="title_activity_orientation_sensor">OrientationSensorActivity</string>
 
 </resources>

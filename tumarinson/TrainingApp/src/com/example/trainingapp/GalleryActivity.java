@@ -15,8 +15,8 @@ import android.app.FragmentTransaction;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -113,7 +113,6 @@ public class GalleryActivity extends Activity implements OnClickListener{
      * sequence.
 	 */
 	public class ImagePagerAdapter extends FragmentPagerAdapter {
-
 		public ImagePagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
