@@ -220,7 +220,7 @@ public class GesturesActivity extends Activity implements OnTouchListener,
 			float distanceY) {
 		tv.setText("onScroll: " +"\n"+ event1.toString()+"\n\n"+event2.toString()
 				+"\n\n"+distanceX+" "+distanceY
-				+"\n\n"+event2.getRawX()+" "+event2.getRawY());
+				+"\n\n"+event2.getX()+" "+event2.getY());
 		
 		iv.setX(event2.getX());
 		iv.setY(event2.getY());

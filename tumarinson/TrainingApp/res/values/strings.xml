@@ -13,11 +13,21 @@
         <item>Прогноз погоды(XML)</item>
         <item>Прогноз погоды(JSON)</item>
         <item>Gestures</item>
-        <item>Еще что-то</item>
+        <item>Dial action</item>
+        <item>Галлерея</item>
     </string-array>
 
+    <string name="dial_title">Название asset файла, содержащего телефонный номер:</string>
+    <string name="dial_but">Вызвать dialer</string>
+    
     <string name="title_activity_weather">WeatherActivity</string>
     <string name="title_activity_weater_activity_json">WeaterActivityJSON</string>
     <string name="title_activity_gestures">GesturesActivity</string>
+    <string name="title_activity_call_dialer">CallDialerActivity</string>
+    <string name="title_activity_gallery">GalleryActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_gal">GalActivity</string>
 
 </resources>

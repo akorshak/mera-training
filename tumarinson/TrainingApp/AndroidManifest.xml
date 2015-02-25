@@ -41,6 +41,15 @@
             android:name=".GesturesActivity"
             android:label="@string/title_activity_gestures" >
         </activity>
+        <activity
+            android:name=".CallDialerActivity"
+            android:label="@string/title_activity_call_dialer" >
+        </activity>
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>
