@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FactQuiz</string>
+    <string name="menu_settings">Settings</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
+	
+	<string name="question_capital">London is the capital of Great Britain.</string>
+	<string name="question_color">Mixing red and green colors results in a blue color.</string>
+    <string name="question_animal">Elephant is the biggest mammal.</string>
+    <string name="question_mountain">The highest mountain in Crimea is 1234 meters height.</string>
+    <string name="question_russia">Russians keep bears home as pets.</string>
+    
+    <string name="cheat_button">Cheat!</string>
+    <string name="cheat_warning">Are you sure you want to cheat?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_toast">Cheating is unfair!</string>
+    
+</resources>
