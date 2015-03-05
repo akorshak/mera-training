@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="red" type="color">#cccf5b20</item>
+    <item name="yellow" type="color">#cccfcf20</item>
+    <item name="green" type="color">#cc20cf5b</item>
+    <item name="blue" type="color">#cc2094cf</item>
+	<item name="black" type="color">#cc000000</item>
+    
+    <integer-array name="staffcolors">
+        <item>@color/red</item>
+        <item>@color/yellow</item>
+        <item>@color/green</item>
+        <item>@color/blue</item>
+        <item>@color/black</item>
+    </integer-array>
+</resources>
