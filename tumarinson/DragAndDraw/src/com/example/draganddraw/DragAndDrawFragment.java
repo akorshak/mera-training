@@ -195,7 +195,9 @@ public class DragAndDrawFragment extends Fragment {
 		}	
 	}
 	
-	/** Class for collect different geometric figures plus color parameter*/
+	/** 
+	 * Class for collect different geometric figures plus color parameter 
+	 * */
 	static class ExtendedFigure {
 		final static int LINE = 0;
 		final static int RECT = 1;

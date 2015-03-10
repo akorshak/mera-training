@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainFragmentList extends ListFragment {
-
 	private String[] listItems;
 	private Class[] listActivities = {
 			ImageViewActivity.class,
