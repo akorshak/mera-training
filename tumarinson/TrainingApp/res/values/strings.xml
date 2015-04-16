@@ -31,5 +31,6 @@
     <string name="title_activity_gal">GalActivity</string>
     <string name="title_activity_gravity_accelerate">GravityAccelerateActivity</string>
     <string name="title_activity_orientation_sensor">OrientationSensorActivity</string>
+    <string name="title_activity_my_dialer">MyDialer</string>
 
 </resources>
