@@ -3,7 +3,7 @@
 
     <string name="app_name">Registrator</string>
     <string name="title_activity">Registrator</string>
-    <string name="title_species">Color</string>
+    <string name="title_species">Color:</string>
     <string name="title_number">Number:</string>
     <string name="title_date">Date</string>
     <string name="title_time">Time</string>

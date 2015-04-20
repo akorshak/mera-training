@@ -134,7 +134,7 @@ public class RegistratorActivity extends Activity {
         mSpeciesList = (ListView)findViewById(R.id.species_list);
         Bundle b = this.getIntent().getExtras();
         String[] array = b.getStringArray(StartActivity.BUNDLE_SPECIES_ARRAY_KEY);
-        ArrayAdapter<String> speciesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,array);
+        ArrayAdapter<String> speciesAdapter = new MyAdapter(this, array);
         mSpeciesList.setAdapter(speciesAdapter);
         mSpeciesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

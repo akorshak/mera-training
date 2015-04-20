@@ -4,21 +4,30 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MyAdapter extends BaseAdapter {
+public class MyAdapter extends ArrayAdapter<String> {
 
-    private Context mContext;
-    private String[] mData;
+    private final Context mContext;
+    private final String[] mData;
 
     public MyAdapter(Context context, String[] objects) {
+    	super(context, R.layout.registrator_row, objects);
         mContext = context;
         mData = objects;
     }
 
     static class ViewHolder {
         TextView txtItem;
+        boolean selected;
+        
+		public boolean isSelected() {
+			return selected;
+		}
+		public void setSelected(boolean selected) {
+			this.selected = selected;
+		}
     }
 
     @Override
@@ -28,20 +37,29 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
+/*    	LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.registrator_row, viewGroup, false);
+        TextView textView = (TextView) rowView.findViewById(R.id.row);
+        textView.setText(mData[position]);
+
+        return rowView;
+*/   	
         ViewHolder viewHolder;
-/*
+
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item, viewGroup, false);
+            convertView = inflater.inflate(R.layout.registrator_row, viewGroup, false);
             viewHolder = new ViewHolder();
-            viewHolder.txtItem = (TextView) convertView.findViewById(R.id.txtItem);
+            viewHolder.txtItem = (TextView) convertView.findViewById(R.id.row);
             convertView.setTag(viewHolder);
-        } else {*/
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
-//        }
+        }
 
         viewHolder.txtItem.setText(getItem(position));
+//      viewHolder.selected = false;
 
         return convertView;
     }
