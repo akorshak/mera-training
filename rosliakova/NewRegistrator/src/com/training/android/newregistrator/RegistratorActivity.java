@@ -5,13 +5,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Xml;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -48,7 +53,6 @@ public class RegistratorActivity extends Activity {
     private NumberPicker mNumberAdult;
 
     private Button mButtonEnd;
-    private Button mButtonSubmit;
 
     private int selectedSpecies = -1;
 
@@ -58,18 +62,26 @@ public class RegistratorActivity extends Activity {
 
     private RadioButton mRadioGPS;
 
+    private String[] speciesArray = {
+            "White crow","Black crow","Black raven"
+    };
+    
+    private String emailString;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrator);
+        
+        Bundle b = this.getIntent().getExtras();
+        emailString = b.getString(StartActivity.BUNDLE_EMAIL_STRING);
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            actionBar.setSubtitle("Count your crows");
-            actionBar.setTitle("Crow registrator");
-            actionBar.setHomeButtonEnabled(true);
+            actionBar.setSubtitle(R.string.catchy_subtitle);
+            actionBar.setTitle(R.string.catchy_title);
         }
 
         mLabelLatitude = (TextView)findViewById(R.id.label_latitude);
@@ -78,8 +90,8 @@ public class RegistratorActivity extends Activity {
         Boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (gpsEnabled) {
             Criteria criteria = new Criteria();
-            String bestProvider = LocationManager.NETWORK_PROVIDER;
-            //String bestProvider = locationManager.getBestProvider(criteria, false);
+            String bestProvider = locationManager.getBestProvider(criteria, false);
+            //String bestProvider = LocationManager.NETWORK_PROVIDER;
             Location location = locationManager.getLastKnownLocation(bestProvider);
             LocationListener loc_listener = new LocationListener() {
 
@@ -87,6 +99,7 @@ public class RegistratorActivity extends Activity {
                     try {
                         mLabelLatitude.setText(String.valueOf(l.getLatitude()));
                         mLabelLongitude.setText(String.valueOf(l.getLongitude()));
+                        mSpeciesList.requestLayout();
                         mRadioGPS.setChecked(true);
                         Handler h = new Handler();
                         h.postDelayed(new Runnable() {
@@ -109,12 +122,12 @@ public class RegistratorActivity extends Activity {
 
                 public void onStatusChanged(String p, int status, Bundle extras) {}
             };
-            locationManager
-                    .requestLocationUpdates(bestProvider, 0, 0, loc_listener);
+            locationManager.requestLocationUpdates(bestProvider, 0, 0, loc_listener);
             location = locationManager.getLastKnownLocation(bestProvider);
             try {
                 mLabelLatitude.setText(String.valueOf(location.getLatitude()));
                 mLabelLongitude.setText(String.valueOf(location.getLongitude()));
+                mSpeciesList.requestLayout();
                 mRadioGPS.setChecked(true);
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
@@ -132,9 +145,7 @@ public class RegistratorActivity extends Activity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.message_GPS),Toast.LENGTH_SHORT).show();
 
         mSpeciesList = (ListView)findViewById(R.id.species_list);
-        Bundle b = this.getIntent().getExtras();
-        String[] array = b.getStringArray(StartActivity.BUNDLE_SPECIES_ARRAY_KEY);
-        ArrayAdapter<String> speciesAdapter = new MyAdapter(this, array);
+        ArrayAdapter<String> speciesAdapter = new MyAdapter(this, speciesArray);
         mSpeciesList.setAdapter(speciesAdapter);
         mSpeciesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -158,8 +169,8 @@ public class RegistratorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(RegistratorActivity.this)
-                        .setTitle("End registration")
-                        .setMessage("Are you sure you want it?")
+                        .setTitle(R.string.alert_end)
+                        .setMessage(R.string.message_confirm)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -177,14 +188,6 @@ public class RegistratorActivity extends Activity {
                                 finish();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
-            }
-        });
-
-        mButtonSubmit = (Button)findViewById(R.id.button_submit);
-        mButtonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddXmlRow(false);
             }
         });
 
@@ -215,22 +218,6 @@ public class RegistratorActivity extends Activity {
             @Override
             public void run() {
                 AddXmlRow(true);
-
-                /*
-                try {
-                    FileWriter fw = new FileWriter(routeFile, true);
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                    String s = formatter.format(new Date()) + " "
-                            + mLabelLatitude.getText().toString() + " "
-                            + mLabelLongitude.getText().toString() + "\n";
-                    fw.append(s);
-                    fw.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-
                 handler.postDelayed(this, 120000);
             }
         });
@@ -283,13 +270,44 @@ public class RegistratorActivity extends Activity {
             formatter = new SimpleDateFormat("yyyyMMddHHmmss");
             now = formatter.format(fileDate);
             serializer.endTag(null, String.valueOf("z" + now));
-
-            //Log.d(getCallingActivity().toString(), "Строка записана");
         }
         catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.activity_registrator, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		    case R.id.menu_item_save:
+		    	new AlertDialog.Builder(RegistratorActivity.this)
+	            .setTitle(R.string.alert_save)
+	            .setMessage(R.string.message_confirm)
+	            .setIcon(android.R.drawable.ic_dialog_alert)
+	            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                	AddXmlRow(false);
+	                	Toast.makeText(getApplicationContext(),getResources().getString(R.string.message_saved),Toast.LENGTH_SHORT).show();
+	                }})
+	            .setNegativeButton(android.R.string.no, null).show();		    	
+		        return true;
+		    case R.id.menu_item_email:
+		    	Intent intent = new Intent(Intent.ACTION_SENDTO);
+		        intent.setData(Uri.parse(emailString));
+		        intent.putExtra(Intent.EXTRA_SUBJECT, R.string.message_notify);
+		        startActivity(intent);
+		        return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
+		}
+	}
 
 }
 

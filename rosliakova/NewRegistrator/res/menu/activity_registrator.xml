@@ -5,5 +5,13 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
+    <item android:id="@+id/menu_item_save"
+		android:icon="@android:drawable/ic_menu_save"
+		android:title="@string/title_submit"
+		android:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/menu_item_email"
+		android:icon="@android:drawable/ic_menu_share"
+		android:title="@string/title_email"
+		android:showAsAction="ifRoom|withText"/>
 
 </menu>

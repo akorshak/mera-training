@@ -19,4 +19,15 @@
     <string name="title_activity_registrator">RegistratorActivity</string>
     <string name="menu_settings">Settings</string>
 
+    <string name="message_confirm">Are you sure you want to do it?</string>
+    <string name="alert_save">Save data</string>
+    <string name="alert_end">End registration</string>
+    <string name="message_saved">Your data is successfully saved</string>
+    
+    <string name="catchy_title">Crow registrator</string>
+    <string name="catchy_subtitle">Count your crows</string>
+    
+    <string name="title_email">Email</string>
+    <string name="message_notify">Crow encounter notification</string>
+    
 </resources>
