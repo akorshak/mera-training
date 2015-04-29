@@ -64,14 +64,24 @@ public class StartActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        FileOutputStream fos = null;
         try {
-            FileOutputStream fos = openFileOutput("SpeciesPriority", Context.MODE_PRIVATE);
+            fos = openFileOutput("SpeciesPriority", Context.MODE_PRIVATE);
             String s;
             s = emailString + "\n";
             fos.write(s.getBytes());
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+    		if (fos != null) {
+            	try {
+		    		fos.flush();
+		    		fos.close();
+            	} catch (Exception e) {
+                    e.printStackTrace();
+                }
+    		}
         }
     }
 }

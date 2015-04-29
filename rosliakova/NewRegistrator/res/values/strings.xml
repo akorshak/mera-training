@@ -30,4 +30,7 @@
     <string name="title_email">Email</string>
     <string name="message_notify">Crow encounter notification</string>
     
+    <string name="array_item_1">White crow</string>
+    <string name="array_item_2">Black crow</string>
+    <string name="array_item_3">Black raven</string>
 </resources>

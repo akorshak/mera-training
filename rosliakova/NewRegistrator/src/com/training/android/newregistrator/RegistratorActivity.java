@@ -62,9 +62,7 @@ public class RegistratorActivity extends Activity {
 
     private RadioButton mRadioGPS;
 
-    private String[] speciesArray = {
-            "White crow","Black crow","Black raven"
-    };
+    private String[] speciesArray;
     
     private String emailString;
     
@@ -145,6 +143,7 @@ public class RegistratorActivity extends Activity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.message_GPS),Toast.LENGTH_SHORT).show();
 
         mSpeciesList = (ListView)findViewById(R.id.species_list);
+        speciesArray = getResources().getStringArray(R.array.array_species);
         ArrayAdapter<String> speciesAdapter = new MyAdapter(this, speciesArray);
         mSpeciesList.setAdapter(speciesAdapter);
         mSpeciesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
