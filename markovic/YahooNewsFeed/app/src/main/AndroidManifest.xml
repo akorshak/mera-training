@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aleksandarmarkovic.yahoonewsfeed" >
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -26,12 +28,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NewsFeedListActivity" />
         </activity>
-        <receiver android:name=".receivers.BootReceiver" android:enabled="false">
+        <receiver android:name=".components.BootReceiver" android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.StartSyncServiceReceiver"/>
+        <service android:name=".components.SyncService"
+            android:exported="false"/>
     </application>
 
 </manifest>

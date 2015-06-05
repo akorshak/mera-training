@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.example.aleksandarmarkovic.yahoonewsfeed.receivers.StartSyncServiceReceiver;
+import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
 import com.example.aleksandarmarkovic.yahoonewsfeed.utils.Utils;
 
 
@@ -61,8 +61,8 @@ public class NewsFeedListActivity extends FragmentActivity
     }
 
     private void doTheStartupActivitySync() {
-        Intent intent = new Intent(getApplicationContext(), StartSyncServiceReceiver.class);
-        sendBroadcast(intent);
+        Intent intent = new Intent(getApplicationContext(), SyncService.class);
+        startService(intent);
     }
 
     /**

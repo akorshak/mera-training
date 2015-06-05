@@ -1,5 +1,6 @@
 package com.example.aleksandarmarkovic.yahoonewsfeed.utils;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -7,11 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.SystemClock;
 import android.widget.Toast;
 
-import com.example.aleksandarmarkovic.yahoonewsfeed.receivers.BootReceiver;
-import com.example.aleksandarmarkovic.yahoonewsfeed.receivers.StartSyncServiceReceiver;
+import com.example.aleksandarmarkovic.yahoonewsfeed.components.BootReceiver;
+import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
 
 /**
  * Created by aleksandar.markovic on 6/5/2015.
@@ -25,14 +28,14 @@ public class Utils {
      */
     public static void setTheSyncAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent notificationReceiverIntent = new Intent(context, StartSyncServiceReceiver.class);
-        PendingIntent notificationReceiverPendingIntent =
-                PendingIntent.getBroadcast(context, 0, notificationReceiverIntent, 0);
+        Intent intent = new Intent(context, SyncService.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getService(context, 0, intent, 0);
         alarmManager.setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + 5 * 1000,
                 30 * 1000,
-                notificationReceiverPendingIntent
+                pendingIntent
         );
         //TODO remove this toast
         Toast.makeText(context, "We started the alarm", Toast.LENGTH_SHORT).show();
@@ -91,5 +94,19 @@ public class Utils {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(Constants.PREFERENCE_SYNC_SETTING, valueToSave);
         editor.commit();
+    }
+
+    /**
+     * Check to see if we have internet connection turned on
+     * @param context
+     * @return true/false depending on the internet connection
+     */
+    public static boolean isConnected(Context context){
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 }
