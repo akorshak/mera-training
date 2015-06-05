@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.example.aleksandarmarkovic.yahoonewsfeed.receivers.StartSyncServiceReceiver;
+import com.example.aleksandarmarkovic.yahoonewsfeed.utils.Utils;
+
 
 /**
  * An activity representing a list of NewsFeeds. This activity
@@ -35,6 +38,11 @@ public class NewsFeedListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsfeed_list);
 
+        if (savedInstanceState == null) {
+            doTheStartupActivitySync();
+            Utils.setSync(this);
+        }
+
         if (findViewById(R.id.newsfeed_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -49,7 +57,12 @@ public class NewsFeedListActivity extends FragmentActivity
                     .setActivateOnItemClick(true);
         }
 
-        // TODO: If exposing deep links into your app, handle intents here.
+
+    }
+
+    private void doTheStartupActivitySync() {
+        Intent intent = new Intent(getApplicationContext(), StartSyncServiceReceiver.class);
+        sendBroadcast(intent);
     }
 
     /**
