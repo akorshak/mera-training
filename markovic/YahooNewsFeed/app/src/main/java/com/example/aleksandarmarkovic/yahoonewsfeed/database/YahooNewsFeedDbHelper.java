@@ -15,16 +15,24 @@ public class YahooNewsFeedDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "YahooNewsFeedDatabase";
 
     private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + NewsEntry.TABLE_NAME + " (" +
-                    NewsEntry._ID + " INTEGER PRIMARY KEY," +
+                    NewsEntry._ID + INT_TYPE + " PRIMARY KEY," +
                     NewsEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     NewsEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     NewsEntry.COLUMN_NAME_PUB_DAT + " DATE" + COMMA_SEP +
                     NewsEntry.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
                     NewsEntry.COLUMN_NAME_IMAGE_URL + TEXT_TYPE + COMMA_SEP +
-                    NewsEntry.COLUMN_NAME_IMAGE_URI + TEXT_TYPE + COMMA_SEP +
+                    NewsEntry.COLUMN_NAME_IMAGE_SD_URI + TEXT_TYPE + COMMA_SEP +
+                    NewsEntry.COLUMN_NAME_IMAGE_WIDTH + INT_TYPE + COMMA_SEP +
+                    NewsEntry.COLUMN_NAME_IMAGE_HEIGHT + INT_TYPE + COMMA_SEP +
+                    NewsEntry.COLUMN_NAME_IMAGE_TYPE + TEXT_TYPE + COMMA_SEP +
+                    " UNIQUE( " +
+                    NewsEntry.COLUMN_NAME_URL + COMMA_SEP +
+                    NewsEntry.COLUMN_NAME_PUB_DAT +
+                    ")ON CONFLICT ABORT" +
             " )";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -46,4 +54,6 @@ public class YahooNewsFeedDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
+
 }

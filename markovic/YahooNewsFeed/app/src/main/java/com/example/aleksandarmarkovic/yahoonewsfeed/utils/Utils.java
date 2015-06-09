@@ -33,8 +33,8 @@ public class Utils {
                 PendingIntent.getService(context, 0, intent, 0);
         alarmManager.setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 5 * 1000,
-                30 * 1000,
+                SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                 pendingIntent
         );
         //TODO remove this toast
