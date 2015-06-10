@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -35,7 +36,8 @@ public class SyncService extends IntentService {
 
     private final static String TAG = SyncService.class.getSimpleName();
 
-    DatabaseManager databaseManager;
+    private DatabaseManager databaseManager;
+    private ImageLoader imageDownloader;
 
     public SyncService() {
         super("SyncService");
@@ -54,6 +56,7 @@ public class SyncService extends IntentService {
         Log.d(TAG, "Sync started");
         DatabaseManager.initializeInstance(new YahooNewsFeedDbHelper(getApplicationContext()));
         databaseManager = DatabaseManager.getInstance();
+        imageDownloader = new ImageLoader(getApplicationContext());
         syncData();
     }
 
@@ -63,10 +66,77 @@ public class SyncService extends IntentService {
      */
     public void syncData() {
         if (Utils.isConnected(getApplicationContext())) {
-            InputStream inputStream = getInputStreamFromURL(Constants.YAHOO_NEWS_REST_RSS_LINK);
-            String JSONData = convertInputStreamToString(inputStream);
-            processJSONData(JSONData);
+            Log.d(TAG, "Fetching new data from the server");
+            String JSONData = fetchDataFromTheServer(Constants.YAHOO_NEWS_REST_RSS_LINK);
+            if (JSONData != null) {
+                Log.d(TAG, "Parse data from the server");
+                processJSONData(JSONData);
+            } else {
+                Log.d(TAG, "There is no data returned from the server");
+            }
         }
+    }
+
+    /**
+     * Gets the InputStream from the Given URL if possible
+     * @param urlString - url from which we want to get the data
+     * @return InputStream from the given url
+     */
+    private String fetchDataFromTheServer(String urlString) {
+        InputStream inputStream = null;
+        String dataFromServer = null;
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setConnectTimeout(5000);
+            httpURLConnection.setReadTimeout(5000);
+            httpURLConnection.setInstanceFollowRedirects(true);
+            inputStream = httpURLConnection.getInputStream();
+            dataFromServer = convertInputStreamToString(inputStream);
+        } catch (MalformedURLException exception) {
+            Log.d(TAG, "Malformed URL: " + Constants.YAHOO_NEWS_REST_RSS_LINK);
+        } catch (IOException e) {
+            Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+        } finally {
+            try {
+                if (inputStream != null)
+                    inputStream.close();
+            } catch (IOException e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        }
+        return dataFromServer;
+    }
+
+    /**
+     * Reads data from the given InputStream
+     * @param inputStream - Stream from which to read the data
+     * @return String representing the data
+     */
+    private String convertInputStreamToString(InputStream inputStream) {
+        BufferedReader reader = null;
+        String result = "";
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            result = stringBuilder.toString();
+        } catch (IOException e) {
+            Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+            result = "IOException: Error opening BufferReader";
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (Exception e) {
+                Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+                result = "IOException: Error closing BufferedReader";
+            }
+        }
+        return result;
     }
 
     /**
@@ -77,14 +147,16 @@ public class SyncService extends IntentService {
     private void processJSONData(String jsonString) {
         JSONObject jsonObject;
         try {
+            Log.d(TAG, jsonString + "");
             jsonObject = new JSONObject(jsonString);
             JSONObject results = jsonObject.optJSONObject("query").optJSONObject("results");
             JSONArray resultItems = results.optJSONArray("item");
             for (int i = 0; i < resultItems.length(); i++) {
                 parseSingleJSONNewsRecord(resultItems.getJSONObject(i));
             }
+
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Can't do the proper parsing of the input string" + e.getLocalizedMessage());
         }
     }
 
@@ -136,7 +208,30 @@ public class SyncService extends IntentService {
      */
     private void saveSingleNewsRecord(SingleNewsItem singleNewsItem) {
         long rowID = writeRecordToTheDatabase(singleNewsItem);
+        if(rowID != -1 && singleNewsItem.hasPicture()) {
+            Log.d(TAG, "Try to download picture");
+            imageDownloader.queuePhoto(singleNewsItem.getUrl(), new ImageLoader.OnImageDownloadedListener() {
+                @Override
+                public void imageDownloaded(String url, String uri) {
+                    updateURIInTheDatabase(url, uri);
+                }
+            });
+        }
+    }
 
+    private void updateURIInTheDatabase(String url, String uri) {
+        ContentValues data = new ContentValues();
+        data.put(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_SD_URI, uri);
+        SQLiteDatabase sqLiteDatabase = databaseManager.openDatabase();
+        long rowID = sqLiteDatabase.update(YahooNewsFeedContract.NewsEntry.TABLE_NAME,
+                data,
+                YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_URL + " = ?",
+                new String[]{url});
+        if (rowID != -1) {
+            Log.d(TAG, "We have updated record in the database" + rowID);
+        } else {
+            Log.d(TAG, "We have updated record in the database");
+        }
     }
 
     /**
@@ -177,63 +272,6 @@ public class SyncService extends IntentService {
         } else {
             Log.d(TAG, "We have the new data in the database, rowID: " + rowID);
         }
+        return rowID;
     }
-
-    /**
-     * Gets the InputStream from the Given URL if possible
-     * @param urlString - url from which we want to get the data
-     * @return InputStream from the given url
-     */
-    private InputStream getInputStreamFromURL(String urlString) {
-        InputStream inputStream = null;
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            inputStream = httpURLConnection.getInputStream();
-        } catch (MalformedURLException exception) {
-            Log.d(TAG, "Malformed URL: " + Constants.YAHOO_NEWS_REST_RSS_LINK);
-        } catch (IOException e) {
-            Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-        } finally {
-            try {
-                if (inputStream != null)
-                    inputStream.close();
-            } catch (IOException e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
-        }
-        return inputStream;
-    }
-
-    /**
-     * Reads data from the given InputStream
-     * @param inputStream - Stream from which to read the data
-     * @return String representing the data
-     */
-    private String convertInputStreamToString(InputStream inputStream) {
-        BufferedReader reader = null;
-        String result = "";
-        try {
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            result = stringBuilder.toString();
-        } catch (IOException e) {
-            Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-            result = "IOException: Error opening BufferReader";
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (Exception e) {
-                Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-                result = "IOException: Error closing BufferedReader";
-            }
-        }
-        return result;
-    }
-
 }
