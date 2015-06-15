@@ -3,12 +3,16 @@ package com.example.aleksandarmarkovic.yahoonewsfeed;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.aleksandarmarkovic.yahoonewsfeed.components.NewsLoader;
+import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
 
-import com.example.aleksandarmarkovic.yahoonewsfeed.dummy.DummyContent;
+import java.util.List;
 
 /**
  * A list fragment representing a list of NewsFeeds. This fragment
@@ -19,37 +23,17 @@ import com.example.aleksandarmarkovic.yahoonewsfeed.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class NewsFeedListFragment extends ListFragment {
+public class NewsFeedListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<SingleNewsItem>> {
+
+    public static final String TAG = NewsFeedListFragment.class.getSimpleName();
 
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
-    private Callbacks mCallbacks = sDummyCallbacks;
-
-    /**
-     * The current activated item position. Only used on tablets.
-     */
-    private int mActivatedPosition = ListView.INVALID_POSITION;
-
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public void onItemSelected(String id);
-    }
-
+    // The Loader's id (this id is specific to the ListFragment's LoaderManager)
+    private static final int LOADER_ID = 1;
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -59,6 +43,16 @@ public class NewsFeedListFragment extends ListFragment {
         public void onItemSelected(String id) {
         }
     };
+    /**
+     * The fragment's current callback object, which is notified of list item
+     * clicks.
+     */
+    private Callbacks mCallbacks = sDummyCallbacks;
+    private NewsListAdapter newsListAdapter;
+    /**
+     * The current activated item position. Only used on tablets.
+     */
+    private int mActivatedPosition = ListView.INVALID_POSITION;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,15 +62,24 @@ public class NewsFeedListFragment extends ListFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        newsListAdapter = new NewsListAdapter(getActivity());
+        setEmptyText("No news");
+        setListAdapter(newsListAdapter);
+        setListShown(false);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "+++ Calling initLoader()! +++");
+            if (getLoaderManager().getLoader(LOADER_ID) == null) {
+                Log.i(TAG, "+++ Initializing the new Loader... +++");
+            } else {
+                Log.i(TAG, "+++ Reconnecting with existing Loader (id '1')... +++");
+            }
+        }
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -116,7 +119,7 @@ public class NewsFeedListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(newsListAdapter.getItem(position).getTitle());
     }
 
     @Override
@@ -148,5 +151,44 @@ public class NewsFeedListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    @Override
+    public Loader<List<SingleNewsItem>> onCreateLoader(int id, Bundle args) {
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "+++ onCreateLoader() called! +++");
+        return new NewsLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<SingleNewsItem>> loader, List<SingleNewsItem> data) {
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "+++ onLoadFinished() called! +++");
+        newsListAdapter.setData(data);
+
+        if (isResumed()) {
+            setListShown(true);
+        } else {
+            setListShownNoAnimation(true);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<SingleNewsItem>> loader) {
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "+++ onLoadReset() called! +++");
+        newsListAdapter.setData(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public void onItemSelected(String id);
     }
 }

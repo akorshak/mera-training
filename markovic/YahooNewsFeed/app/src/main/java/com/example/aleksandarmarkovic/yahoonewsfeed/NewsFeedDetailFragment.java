@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.example.aleksandarmarkovic.yahoonewsfeed.dummy.DummyContent;
-
 /**
  * A fragment representing a single NewsFeed detail screen.
  * This fragment is either contained in a {@link NewsFeedListActivity}
@@ -24,9 +21,9 @@ public class NewsFeedDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * The dummy content this fragment is presenting.
+     * The title this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private String newsTitle;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +40,7 @@ public class NewsFeedDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            newsTitle = getArguments().getString(ARG_ITEM_ID);
         }
     }
 
@@ -53,8 +50,8 @@ public class NewsFeedDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_newsfeed_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.newsfeed_detail)).setText(mItem.content);
+        if (newsTitle != null) {
+            ((TextView) rootView.findViewById(R.id.newsfeed_detail)).setText(newsTitle);
         }
 
         return rootView;

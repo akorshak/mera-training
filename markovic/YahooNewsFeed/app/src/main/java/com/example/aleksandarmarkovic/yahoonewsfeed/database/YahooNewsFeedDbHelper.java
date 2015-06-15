@@ -11,7 +11,7 @@ import com.example.aleksandarmarkovic.yahoonewsfeed.database.YahooNewsFeedContra
  */
 public class YahooNewsFeedDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "YahooNewsFeedDatabase";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -33,14 +33,14 @@ public class YahooNewsFeedDbHelper extends SQLiteOpenHelper {
                     NewsEntry.COLUMN_NAME_URL + COMMA_SEP +
                     NewsEntry.COLUMN_NAME_PUB_DAT +
                     ")ON CONFLICT ABORT" +
-            " )";
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + NewsEntry.TABLE_NAME;
 
     public YahooNewsFeedDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

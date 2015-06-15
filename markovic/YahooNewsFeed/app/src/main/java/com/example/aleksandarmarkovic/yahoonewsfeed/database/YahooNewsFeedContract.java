@@ -9,7 +9,8 @@ public final class YahooNewsFeedContract {
 
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
-    public YahooNewsFeedContract() {}
+    public YahooNewsFeedContract() {
+    }
 
     /* Inner class that defines the table contents */
     public static abstract class NewsEntry implements BaseColumns {
@@ -23,5 +24,19 @@ public final class YahooNewsFeedContract {
         public static final String COLUMN_NAME_IMAGE_WIDTH = "image_width";
         public static final String COLUMN_NAME_IMAGE_TYPE = "image_type";
         public static final String COLUMN_NAME_IMAGE_SD_URI = "image_sd_uri";
+
+        public static final String[] SELECT_ALL = {
+                _ID,
+                COLUMN_NAME_TITLE,
+                COLUMN_NAME_DESCRIPTION,
+                COLUMN_NAME_PUB_DAT,
+                COLUMN_NAME_URL,
+                COLUMN_NAME_IMAGE_URL,
+                COLUMN_NAME_IMAGE_HEIGHT,
+                COLUMN_NAME_IMAGE_WIDTH,
+                COLUMN_NAME_IMAGE_TYPE,
+                COLUMN_NAME_IMAGE_SD_URI
+        };
+
     }
 }

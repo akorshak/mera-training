@@ -9,23 +9,25 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by aleksandar.markovic on 6/9/2015.
  * Class that will handle Database connection properly,
  * even when we have multiply threads running and communicating with the database.
+ *
  * @see <a href="http://blog.lemberg.co.uk/concurrent-database-access">Concurrent Database Access</a>
  */
 public class DatabaseManager {
 
-    private AtomicInteger numberOfOpenConnections = new AtomicInteger();
-
     private static DatabaseManager instance;
     private static SQLiteOpenHelper databaseHelper;
+    private AtomicInteger numberOfOpenConnections = new AtomicInteger();
     private SQLiteDatabase database;
 
     /**
      * Prevent someone from instantiating this class
      */
-    public DatabaseManager() {}
+    public DatabaseManager() {
+    }
 
     /**
      * We need to call this method when we want to initialize the database
+     *
      * @param helper - single connection that we want to use for the database
      */
     public static synchronized void initializeInstance(SQLiteOpenHelper helper) {
@@ -37,6 +39,7 @@ public class DatabaseManager {
 
     /**
      * Singleton getter
+     *
      * @return - returns DatabaseManager singleton
      */
     public static synchronized DatabaseManager getInstance() {
@@ -49,6 +52,7 @@ public class DatabaseManager {
 
     /**
      * Call this method when you want to get Database for writing/reading
+     *
      * @return database
      */
     public synchronized SQLiteDatabase openDatabase() {

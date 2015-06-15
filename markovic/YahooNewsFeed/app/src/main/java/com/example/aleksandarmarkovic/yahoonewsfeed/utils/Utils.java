@@ -1,5 +1,6 @@
 package com.example.aleksandarmarkovic.yahoonewsfeed.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,9 +11,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.widget.Toast;
 
+import com.example.aleksandarmarkovic.yahoonewsfeed.NewsFeedDetailActivity;
+import com.example.aleksandarmarkovic.yahoonewsfeed.NewsFeedListActivity;
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.BootReceiver;
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
 
@@ -20,6 +25,11 @@ import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
  * Created by aleksandar.markovic on 6/5/2015.
  */
 public class Utils {
+
+    private Utils() {
+    }
+
+    ;
 
     /**
      * Starts the Sync Alarm
@@ -98,15 +108,66 @@ public class Utils {
 
     /**
      * Check to see if we have internet connection turned on
+     *
      * @param context
      * @return true/false depending on the internet connection
      */
-    public static boolean isConnected(Context context){
+    public static boolean isConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected())
             return true;
         else
             return false;
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static void enableStrictMode() {
+        if (Utils.hasGingerbread()) {
+            StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
+                    new StrictMode.ThreadPolicy.Builder()
+                            .detectAll()
+                            .penaltyLog();
+            StrictMode.VmPolicy.Builder vmPolicyBuilder =
+                    new StrictMode.VmPolicy.Builder()
+                            .detectAll()
+                            .penaltyLog();
+
+            if (Utils.hasHoneycomb()) {
+                threadPolicyBuilder.penaltyFlashScreen();
+                vmPolicyBuilder
+                        .setClassInstanceLimit(NewsFeedListActivity.class, 1)
+                        .setClassInstanceLimit(NewsFeedDetailActivity.class, 1);
+            }
+            StrictMode.setThreadPolicy(threadPolicyBuilder.build());
+            StrictMode.setVmPolicy(vmPolicyBuilder.build());
+        }
+    }
+
+    public static boolean hasFroyo() {
+        // Can use static final constants like FROYO, declared in later versions
+        // of the OS since they are inlined at compile time. This is guaranteed behavior.
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+    }
+
+    public static boolean hasGingerbread() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+    }
+
+    public static boolean hasHoneycomb() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    }
+
+    public static boolean hasHoneycombMR1() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
+    }
+
+    public static boolean hasJellyBean() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
+
+    public static boolean hasKitKat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 }

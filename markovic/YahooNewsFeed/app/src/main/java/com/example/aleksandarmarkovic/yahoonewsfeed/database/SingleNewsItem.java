@@ -64,6 +64,12 @@ public class SingleNewsItem {
         this.image = new ImageData(imageType, imageURL, width, height);
     }
 
+    public void setImageSDCardURI(String URI) {
+        if (image != null) {
+            image.setImageURI(URI);
+        }
+    }
+
     public boolean hasPicture() {
         return image != null;
     }
@@ -140,6 +146,7 @@ public class SingleNewsItem {
             contentValues.put(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_TYPE, getImageType());
             contentValues.put(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_WIDTH, getWidth());
             contentValues.put(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_HEIGHT, getHeight());
+            contentValues.put(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_SD_URI, getImageURI());
         }
     }
 
