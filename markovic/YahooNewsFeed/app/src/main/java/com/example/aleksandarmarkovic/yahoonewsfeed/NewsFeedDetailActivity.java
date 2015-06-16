@@ -39,8 +39,8 @@ public class NewsFeedDetailActivity extends ActionBarActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(NewsFeedDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(NewsFeedDetailFragment.ARG_ITEM_ID));
+            arguments.putParcelable(NewsFeedDetailFragment.SINGLE_NEWS_ITEM_PARCELABLE,
+                    getIntent().getParcelableExtra(NewsFeedDetailFragment.SINGLE_NEWS_ITEM_PARCELABLE));
             NewsFeedDetailFragment fragment = new NewsFeedDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

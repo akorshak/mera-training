@@ -163,7 +163,7 @@ public class SyncService extends IntentService {
             final List<SingleNewsItem> newsItemArrayList = new ArrayList<>();
 
             for (int i = 0; i < resultItems.length(); i++) {
-                SingleNewsItem singleNewsItem = parseSingleJSONNewsRecord(resultItems.getJSONObject(i));
+                final SingleNewsItem singleNewsItem = parseSingleJSONNewsRecord(resultItems.getJSONObject(i));
                 if (singleNewsItem != null) {
                     // we need to check and see if we all ready have this news in the database
                     boolean weHaveThisNews = checkDoWeHaveThisNewsAllReadyInTheDatabase(singleNewsItem);
@@ -172,10 +172,10 @@ public class SyncService extends IntentService {
                         newsItemArrayList.add(singleNewsItem);
                         // start the download process if this single news item has the image
                         if (singleNewsItem.hasPicture()) {
-                            imageDownloader.queuePhoto(singleNewsItem.getUrl(), new ImageDownloader.OnImageDownloadedListener() {
+                            imageDownloader.queuePhoto(singleNewsItem, new ImageDownloader.OnImageDownloadedListener() {
                                 @Override
-                                public void imageDownloaded(String url, String uri) {
-                                    updateImageURIInTheSingleNewsList(newsItemArrayList, url, uri);
+                                public void imageDownloaded(SingleNewsItem singleNewsItem1, String uri) {
+                                    updateImageURIInTheSingleNewsList(newsItemArrayList, singleNewsItem.getUrl(), uri);
                                 }
                             });
                         } else {
@@ -237,7 +237,7 @@ public class SyncService extends IntentService {
             JSONObject content = jsonObject.optJSONObject("content");
             if (content != null) {
                 String contentType = content.getString("type");
-                if (contentType.startsWith("image/")) {
+                if (contentType.startsWith("image")) {
                     int width = content.getInt("width");
                     int height = content.getInt("height");
                     String imageURL = content.getString("url");

@@ -3,9 +3,13 @@ package com.example.aleksandarmarkovic.yahoonewsfeed;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
+import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
 import com.example.aleksandarmarkovic.yahoonewsfeed.utils.Utils;
+
+import org.parceler.Parcels;
 
 
 /**
@@ -26,6 +30,8 @@ import com.example.aleksandarmarkovic.yahoonewsfeed.utils.Utils;
  */
 public class NewsFeedListActivity extends FragmentActivity
         implements NewsFeedListFragment.Callbacks {
+
+    private static final String TAG = NewsFeedListActivity.class.getSimpleName();
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -49,15 +55,7 @@ public class NewsFeedListActivity extends FragmentActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((NewsFeedListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.newsfeed_list))
-                    .setActivateOnItemClick(true);
         }
-
-
     }
 
     private void doTheStartupActivitySync() {
@@ -70,13 +68,14 @@ public class NewsFeedListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(SingleNewsItem singleNewsItem) {
+        Log.d(TAG, singleNewsItem.getTitle());
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(NewsFeedDetailFragment.ARG_ITEM_ID, id);
+            arguments.putParcelable(NewsFeedDetailFragment.SINGLE_NEWS_ITEM_PARCELABLE, Parcels.wrap(singleNewsItem));
             NewsFeedDetailFragment fragment = new NewsFeedDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -87,7 +86,7 @@ public class NewsFeedListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, NewsFeedDetailActivity.class);
-            detailIntent.putExtra(NewsFeedDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(NewsFeedDetailFragment.SINGLE_NEWS_ITEM_PARCELABLE, Parcels.wrap(singleNewsItem));
             startActivity(detailIntent);
         }
     }

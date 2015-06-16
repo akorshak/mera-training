@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
+
+import org.parceler.Parcels;
+
 /**
  * A fragment representing a single NewsFeed detail screen.
  * This fragment is either contained in a {@link NewsFeedListActivity}
@@ -18,12 +22,12 @@ public class NewsFeedDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String SINGLE_NEWS_ITEM_PARCELABLE = "item_id";
 
     /**
      * The title this fragment is presenting.
      */
-    private String newsTitle;
+    private SingleNewsItem newsTitle;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -36,11 +40,11 @@ public class NewsFeedDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(SINGLE_NEWS_ITEM_PARCELABLE)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            newsTitle = getArguments().getString(ARG_ITEM_ID);
+            newsTitle = Parcels.unwrap(getArguments().getParcelable(SINGLE_NEWS_ITEM_PARCELABLE));
         }
     }
 
@@ -51,7 +55,7 @@ public class NewsFeedDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (newsTitle != null) {
-            ((TextView) rootView.findViewById(R.id.newsfeed_detail)).setText(newsTitle);
+            ((TextView) rootView.findViewById(R.id.newsfeed_detail)).setText(newsTitle.getTitle());
         }
 
         return rootView;

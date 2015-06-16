@@ -32,7 +32,9 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
 
     /****************************************************/
     /** (1) A task that performs the asynchronous load **/
-    /****************************************************/
+    /**
+     * ************************************************
+     */
 
     public NewsLoader(Context ctx) {
         // Loaders may be used across multiple Activitys (assuming they aren't
