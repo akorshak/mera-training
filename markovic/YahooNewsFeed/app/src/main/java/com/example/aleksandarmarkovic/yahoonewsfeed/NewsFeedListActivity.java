@@ -2,8 +2,12 @@ package com.example.aleksandarmarkovic.yahoonewsfeed;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
 import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
@@ -28,7 +32,7 @@ import org.parceler.Parcels;
  * {@link NewsFeedListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class NewsFeedListActivity extends FragmentActivity
+public class NewsFeedListActivity extends AppCompatActivity
         implements NewsFeedListFragment.Callbacks {
 
     private static final String TAG = NewsFeedListActivity.class.getSimpleName();
@@ -38,6 +42,8 @@ public class NewsFeedListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,14 @@ public class NewsFeedListActivity extends FragmentActivity
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.app_name);
+            setSupportActionBar(toolbar);
+        }
+
+
     }
 
     private void doTheStartupActivitySync() {
@@ -89,5 +103,40 @@ public class NewsFeedListActivity extends FragmentActivity
             detailIntent.putExtra(NewsFeedDetailFragment.SINGLE_NEWS_ITEM_PARCELABLE, Parcels.wrap(singleNewsItem));
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "Text: " + query);
+                sendSearchQueryToListFragment(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "Text: " + newText);
+                sendSearchQueryToListFragment(newText);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    /**
+     * Sends what user enters in the SearchView to the NewsFeedListFragment
+     * after which fragment restarts Loader and display a new data in the list
+     * @param newQuery - text that the user entered
+     */
+    private void sendSearchQueryToListFragment(String newQuery) {
+        NewsFeedListFragment newsFeedListFragment = (NewsFeedListFragment) getSupportFragmentManager().findFragmentById(R.id.newsfeed_list);
+        newsFeedListFragment.setNewSearchQuery(newQuery);
     }
 }

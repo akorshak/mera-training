@@ -3,8 +3,11 @@ package com.example.aleksandarmarkovic.yahoonewsfeed;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 
 /**
@@ -16,15 +19,38 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link NewsFeedDetailFragment}.
  */
-public class NewsFeedDetailActivity extends ActionBarActivity {
+public class NewsFeedDetailActivity extends AppCompatActivity {
+
+    /**
+     * Toolbar that is a replacement for the ActionBar
+     */
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsfeed_detail);
 
-        // Show the Up button in the action bar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+
+        if (toolbar != null) {
+            // Show the Up button in the action bar.
+            setSupportActionBar(toolbar);
+
+            ActionBar supportActionBar = getSupportActionBar();
+            if (supportActionBar != null) {
+                supportActionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
+            toolbar.setNavigationIcon(R.drawable.ic_action_back_navigation_icon);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavUtils.navigateUpFromSameTask(NewsFeedDetailActivity.this);
+                }
+            });
+        }
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

@@ -3,4 +3,5 @@
     <string name="title_newsfeed_detail">NewsFeed Detail</string>
     <string name="single_news_list_item_icon_text">icon</string>
     <string name="no_network_connection_toast">No network</string>
+    <string name="menu_action_search_text">Search</string>
 </resources>

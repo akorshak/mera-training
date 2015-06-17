@@ -10,25 +10,24 @@
         android:layout_height="64dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="1dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:contentDescription="@string/single_news_list_item_icon_text"
-        />
+        android:contentDescription="@string/single_news_list_item_icon_text" />
 
     <!-- title -->
     <TextView
         android:id="@+id/item_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/item_icon"
-        android:layout_toEndOf="@+id/item_icon"
         android:layout_alignBaseline="@+id/item_icon"
-        android:textColor="@android:color/darker_gray"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/item_icon"
+        android:layout_toRightOf="@+id/item_icon"
+        android:textColor="@android:color/darker_gray"
         android:textSize="22sp" />
 
 </RelativeLayout>

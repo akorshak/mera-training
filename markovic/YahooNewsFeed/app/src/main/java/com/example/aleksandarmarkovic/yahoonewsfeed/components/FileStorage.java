@@ -13,30 +13,29 @@ public class FileStorage {
 
     private static final String TAG = FileStorage.class.getSimpleName();
 
-    Context context;
+    private Context context;
 
     public FileStorage(Context context) {
         this.context = context;
     }
 
     public synchronized File getFile(String url) {
-        File f = null;
+        File file = null;
 
         if (url == null)
-            return f;
+            return file;
 
         if (isExternalStorageWritable()) {
             String filename = String.valueOf(Math.abs(url.hashCode()));
             Log.d(TAG, "Trying to open a new file with filename: " + filename);
-            File file = context.getExternalFilesDir(null);
-            if (file == null) {
+            if (file == context.getExternalFilesDir(null)) {
                 Log.e(TAG, "We cant open external files dir");
             } else {
-                f = new File(context.getExternalFilesDir(null), filename);
-                Log.d(TAG, "We have a new file open: " + f);
+                file = new File(context.getExternalFilesDir(null), filename);
+                Log.d(TAG, "We have a new file open: " + file);
             }
         }
-        return f;
+        return file;
     }
 
     /* Checks if external storage is available for read and write */

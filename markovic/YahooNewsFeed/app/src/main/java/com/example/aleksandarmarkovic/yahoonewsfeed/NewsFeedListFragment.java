@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.NewsLoader;
@@ -33,6 +32,7 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
      * The Loader's id (this id is specific to the ListFragment's LoaderManager)
      */
     private static final int LOADER_ID = 1;
+
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -51,11 +51,12 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
      */
     private Callbacks mCallbacks = sDummyCallbacks;
 
-
     /**
-     * The current activated item position. Only used on tablets.
+     * Query text that the user enteres in the Search View in the NewsFeedListActivity toolbar,
+     * and which is provided to this fragment, so we can restart loader, and load new data
+     * from the database.
      */
-    private int mActivatedPosition = ListView.INVALID_POSITION;
+    private String queryText;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -102,11 +103,6 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
@@ -121,58 +117,15 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onDetach() {
         super.onDetach();
-
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks;
-    }
-
-    /*
-    @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
-
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(newsListAdapter.getItem(position).getTitle());
-    }
-    */
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            //outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-        }
-    }
-
-    /**
-     * Turns on activate-on-click mode. When this mode is on, list items will be
-     * given the 'activated' state when touched.
-     */
-    public void setActivateOnItemClick(boolean activateOnItemClick) {
-        // When setting CHOICE_MODE_SINGLE, ListView will automatically
-        // give items the 'activated' state when touched.
-        //getListView().setChoiceMode(activateOnItemClick
-        //        ? ListView.CHOICE_MODE_SINGLE
-        //        : ListView.CHOICE_MODE_NONE);
-    }
-
-    private void setActivatedPosition(int position) {
-        if (position == ListView.INVALID_POSITION) {
-            //getListView().setItemChecked(mActivatedPosition, false);
-        } else {
-            //getListView().setItemChecked(position, true);
-        }
-
-        mActivatedPosition = position;
     }
 
     @Override
     public Loader<List<SingleNewsItem>> onCreateLoader(int id, Bundle args) {
         if (BuildConfig.DEBUG)
             Log.i(TAG, "+++ onCreateLoader() called! +++");
-        return new NewsLoader(getActivity());
+        return new NewsLoader(getActivity(), queryText);
     }
 
     @Override
@@ -188,6 +141,11 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
         if (BuildConfig.DEBUG)
             Log.i(TAG, "+++ onLoadReset() called! +++");
         newsListAdapter.setData(null);
+    }
+
+    public void setNewSearchQuery(String queryText) {
+        this.queryText = queryText;
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     /**

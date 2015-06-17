@@ -27,11 +27,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
 
     public void setData(List<SingleNewsItem> newData) {
-        newsItemList.clear();
         if (newData != null) {
+            newsItemList.clear();
             newsItemList.addAll(newData);
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)
