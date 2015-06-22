@@ -64,12 +64,8 @@ public class NewsFeedListActivity extends AppCompatActivity
         }
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.app_name);
-            setSupportActionBar(toolbar);
-        }
-
-
+        toolbar.setTitle(R.string.app_name);
+        setSupportActionBar(toolbar);
     }
 
     private void doTheStartupActivitySync() {
@@ -133,6 +129,7 @@ public class NewsFeedListActivity extends AppCompatActivity
     /**
      * Sends what user enters in the SearchView to the NewsFeedListFragment
      * after which fragment restarts Loader and display a new data in the list
+     *
      * @param newQuery - text that the user entered
      */
     private void sendSearchQueryToListFragment(String newQuery) {

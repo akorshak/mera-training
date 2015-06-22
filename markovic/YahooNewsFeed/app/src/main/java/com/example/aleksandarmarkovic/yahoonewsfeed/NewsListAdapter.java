@@ -1,6 +1,9 @@
 package com.example.aleksandarmarkovic.yahoonewsfeed;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +23,16 @@ import java.util.List;
  */
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
 
-    NewsItemOnClickListener newsItemOnClickListener;
-    private List<SingleNewsItem> newsItemList;
+    private static final String TAG = NewsListAdapter.class.getSimpleName();
 
-    public NewsListAdapter(NewsItemOnClickListener newsItemOnClickListener) {
+    private NewsItemOnClickListener newsItemOnClickListener;
+    private List<SingleNewsItem> newsItemList;
+    private Context context;
+
+    public NewsListAdapter(NewsItemOnClickListener newsItemOnClickListener, Context context) {
         this.newsItemOnClickListener = newsItemOnClickListener;
         this.newsItemList = new ArrayList<>();
+        this.context = context;
     }
 
 
@@ -60,7 +70,26 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         // - replace the contents of the view with that itemsData
 
         viewHolder.txtViewTitle.setText(newsItemList.get(position).getTitle());
-        //viewHolder.imgViewIcon.setImageResource(newsItemList.get(position).getTitle());
+        final SingleNewsItem singleNewsItem = newsItemList.get(position);
+        if (singleNewsItem.hasPicture()) {
+            Picasso.with(context)
+                    .load(newsItemList.get(position).getImage().getImageURL())
+                            //.transform(new FitToTargetViewTransformation(viewHolder.imgViewIcon))
+                    .fit().centerCrop()
+                    .into(viewHolder.imgViewIcon, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d(TAG, "Image loading success");
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.d(TAG, "Could not load this image: " + singleNewsItem.getImage().getImageURI());
+                        }
+                    });
+        } else {
+            viewHolder.imgViewIcon.setImageResource(R.drawable.no_image);
+        }
 
 
     }

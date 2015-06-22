@@ -1,10 +1,12 @@
 package com.example.aleksandarmarkovic.yahoonewsfeed;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.components.NewsLoader;
+import com.example.aleksandarmarkovic.yahoonewsfeed.components.SyncService;
 import com.example.aleksandarmarkovic.yahoonewsfeed.database.SingleNewsItem;
 
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class NewsFeedListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<SingleNewsItem>> {
+public class NewsFeedListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<SingleNewsItem>>, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = NewsFeedListFragment.class.getSimpleName();
 
@@ -45,6 +48,8 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
     private NewsListAdapter newsListAdapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -74,7 +79,7 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
             public void onNewsClicked(SingleNewsItem singleNewsItem) {
                 mCallbacks.onItemSelected(singleNewsItem);
             }
-        });
+        }, getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(newsListAdapter);
@@ -99,6 +104,10 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.fragment_newsfeed_list, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         progressBar = (ProgressBar) view.findViewById(R.id.loading_progress_bar);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        //TODO add color to support our color theme
+        //swipeRefreshLayout.setColorSchemeColors();
         return view;
     }
 
@@ -132,6 +141,9 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
     public void onLoadFinished(Loader<List<SingleNewsItem>> loader, List<SingleNewsItem> data) {
         if (BuildConfig.DEBUG)
             Log.i(TAG, "+++ onLoadFinished() called! +++");
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         newsListAdapter.setData(data);
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -148,6 +160,13 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
+    @Override
+    public void onRefresh() {
+        Intent intent = new Intent(getActivity(), SyncService.class);
+        getActivity().startService(intent);
+        //TODO set some timer if refresh is not done properly
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -157,6 +176,6 @@ public class NewsFeedListFragment extends Fragment implements LoaderManager.Load
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(SingleNewsItem singleNewsItem);
+        void onItemSelected(SingleNewsItem singleNewsItem);
     }
 }

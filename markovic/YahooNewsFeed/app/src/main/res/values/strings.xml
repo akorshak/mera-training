@@ -4,4 +4,6 @@
     <string name="single_news_list_item_icon_text">icon</string>
     <string name="no_network_connection_toast">No network</string>
     <string name="menu_action_search_text">Search</string>
+    <string name="news_description_text">News description</string>
+    <string name="news_title_text">News title</string>
 </resources>

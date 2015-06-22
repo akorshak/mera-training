@@ -1,6 +1,7 @@
 package com.example.aleksandarmarkovic.yahoonewsfeed.components;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.aleksandarmarkovic.yahoonewsfeed.BuildConfig;
@@ -38,8 +39,8 @@ public class ImageDownloader {
     /**
      * Queue photo for downloading
      *
-     * @param url      - url of the photo do download
-     * @param listener - listener to notify the caller when the image downloaded
+     * @param singleNewsItem - Single news for witch to download the image
+     * @param listener       - listener to notify the caller when the image downloaded
      */
     public void queuePhoto(SingleNewsItem singleNewsItem, OnImageDownloadedListener listener) {
         try {
@@ -79,7 +80,7 @@ public class ImageDownloader {
                 is = connection.getInputStream();
                 os = new FileOutputStream(f);
                 copyStream(is, os);
-                listener.imageDownloaded(singleNewsItem, f.toURI().toString());
+                listener.imageDownloaded(singleNewsItem, Uri.fromFile(f).toString());
             } catch (MalformedURLException e) {
                 Log.e(TAG, "Image url cant be processed: " + e.getLocalizedMessage());
                 listener.imageDownloaded(singleNewsItem, Constants.IMAGE_DOWNLOAD_ERROR);

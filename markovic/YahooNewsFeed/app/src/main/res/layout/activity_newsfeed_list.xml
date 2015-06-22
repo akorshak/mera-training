@@ -15,8 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tool_bar"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         tools:context=".NewsFeedListActivity"
         tools:layout="@android:layout/list_content" />
 </RelativeLayout>

@@ -33,23 +33,21 @@ public class NewsFeedDetailActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
 
-        if (toolbar != null) {
-            // Show the Up button in the action bar.
-            setSupportActionBar(toolbar);
+        // Show the Up button in the action bar.
+        setSupportActionBar(toolbar);
 
-            ActionBar supportActionBar = getSupportActionBar();
-            if (supportActionBar != null) {
-                supportActionBar.setDisplayHomeAsUpEnabled(true);
-            }
-
-            toolbar.setNavigationIcon(R.drawable.ic_action_back_navigation_icon);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    NavUtils.navigateUpFromSameTask(NewsFeedDetailActivity.this);
-                }
-            });
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        toolbar.setNavigationIcon(R.drawable.ic_action_back_navigation_icon);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.navigateUpFromSameTask(NewsFeedDetailActivity.this);
+            }
+        });
 
 
         // savedInstanceState is non-null when there is fragment state
@@ -83,7 +81,6 @@ public class NewsFeedDetailActivity extends AppCompatActivity {
             // activity, the Up button is shown. Use NavUtils to allow users
             // to navigate up one level in the application structure. For
             // more details, see the Navigation pattern on Android Design:
-            //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             NavUtils.navigateUpTo(this, new Intent(this, NewsFeedListActivity.class));

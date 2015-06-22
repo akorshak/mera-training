@@ -77,14 +77,14 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
         }
 
         //TODO add limit clausule, consider adding some index to title column
-        String WHERE = YahooNewsFeedContract.NewsEntry.COLUMN_NAME_TITLE + " LIKE '%?%' ";
+        String WHERE = YahooNewsFeedContract.NewsEntry.COLUMN_NAME_TITLE + " LIKE ? ";
 
         DatabaseManager.initializeInstance(new YahooNewsFeedDbHelper(getContext()));
         DatabaseManager databaseManager = DatabaseManager.getInstance();
         Cursor cursor = databaseManager.openDatabase().query(YahooNewsFeedContract.NewsEntry.TABLE_NAME,
                 YahooNewsFeedContract.NewsEntry.SELECT_ALL,
                 WHERE,
-                new String[]{searchQueryText},
+                new String[]{"%" + searchQueryText + "%"},
                 null,
                 null,
                 null);
@@ -93,8 +93,20 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
             if (cursor.moveToFirst()) {
                 do {
                     String title = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_TITLE));
-                    SingleNewsItem singleNewsItem = new SingleNewsItem();
-                    singleNewsItem.setTitle(title);
+                    String description = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_DESCRIPTION));
+                    String publicationDateAsString = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_PUB_DAT));
+                    String url = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_URL));
+                    SingleNewsItem singleNewsItem = new SingleNewsItem(title, description, publicationDateAsString, url);
+
+                    String imageUrl = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_URL));
+                    if (imageUrl != null && !imageUrl.equals("")) {
+                        String imageSDUri = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_SD_URI));
+                        String imageType = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_TYPE));
+                        int width = Integer.parseInt(cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_WIDTH)));
+                        int height = Integer.parseInt(cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_HEIGHT)));
+                        singleNewsItem.setImage(imageType, imageUrl, width, height);
+                        singleNewsItem.setImageSDCardURI(imageSDUri);
+                    }
                     newsItems.add(singleNewsItem);
                 } while (cursor.moveToNext());
             }
