@@ -30,17 +30,30 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
     // An observer to notify the Loader when we have new news in the database.
     private SyncCompleteReceiver newNewsObserver;
 
+    /**
+     * That on which we base our search in the database, Every news item that has this text in
+     * its Title will be put in the search result list that this Loader provides
+     */
+    private String searchQueryText;
+
     /****************************************************/
     /** (1) A task that performs the asynchronous load **/
-    /****************************************************/
+    /**
+     * ************************************************
+     */
 
-    public NewsLoader(Context ctx) {
+    public NewsLoader(Context ctx, String queryText) {
         // Loaders may be used across multiple Activitys (assuming they aren't
         // bound to the LoaderManager), so NEVER hold a reference to the context
         // directly. Doing so will cause you to leak an entire Activity's context.
         // The superclass constructor will store a reference to the Application
         // Context instead, and can be retrieved with a call to getContext().
         super(ctx);
+        if (queryText == null) {
+            this.searchQueryText = "";
+        } else {
+            this.searchQueryText = queryText;
+        }
     }
 
     /*******************************************/
@@ -63,13 +76,15 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
             newsItems = new ArrayList<>();
         }
 
-        //TODO add limit clausule
+        //TODO add limit clausule, consider adding some index to title column
+        String WHERE = YahooNewsFeedContract.NewsEntry.COLUMN_NAME_TITLE + " LIKE ? ";
+
         DatabaseManager.initializeInstance(new YahooNewsFeedDbHelper(getContext()));
         DatabaseManager databaseManager = DatabaseManager.getInstance();
         Cursor cursor = databaseManager.openDatabase().query(YahooNewsFeedContract.NewsEntry.TABLE_NAME,
                 YahooNewsFeedContract.NewsEntry.SELECT_ALL,
-                null,
-                null,
+                WHERE,
+                new String[]{"%" + searchQueryText + "%"},
                 null,
                 null,
                 null);
@@ -78,8 +93,20 @@ public class NewsLoader extends AsyncTaskLoader<List<SingleNewsItem>> {
             if (cursor.moveToFirst()) {
                 do {
                     String title = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_TITLE));
-                    SingleNewsItem singleNewsItem = new SingleNewsItem();
-                    singleNewsItem.setTitle(title);
+                    String description = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_DESCRIPTION));
+                    String publicationDateAsString = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_PUB_DAT));
+                    String url = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_URL));
+                    SingleNewsItem singleNewsItem = new SingleNewsItem(title, description, publicationDateAsString, url);
+
+                    String imageUrl = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_URL));
+                    if (imageUrl != null && !imageUrl.equals("")) {
+                        String imageSDUri = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_SD_URI));
+                        String imageType = cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_TYPE));
+                        int width = Integer.parseInt(cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_WIDTH)));
+                        int height = Integer.parseInt(cursor.getString(cursor.getColumnIndex(YahooNewsFeedContract.NewsEntry.COLUMN_NAME_IMAGE_HEIGHT)));
+                        singleNewsItem.setImage(imageType, imageUrl, width, height);
+                        singleNewsItem.setImageSDCardURI(imageSDUri);
+                    }
                     newsItems.add(singleNewsItem);
                 } while (cursor.moveToNext());
             }

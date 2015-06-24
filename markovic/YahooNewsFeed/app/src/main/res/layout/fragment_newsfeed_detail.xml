@@ -1,5 +1,24 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/newsfeed_detail"
-    style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp" android:textIsSelectable="true"
-    tools:context=".NewsFeedDetailFragment" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewsFeedDetailFragment">
+
+    <com.gc.materialdesign.views.ProgressBarDeterminate
+        android:id="@+id/loading_page_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#004d40" />
+
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/newsfeed_detail"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/loading_page_progress_bar"
+        android:padding="16dp"
+        android:textIsSelectable="true"
+        tools:context=".NewsFeedDetailFragment" />
+
+</RelativeLayout>
