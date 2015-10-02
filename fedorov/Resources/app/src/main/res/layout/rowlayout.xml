@@ -4,22 +4,18 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <tng.fedorov.resources.DrawView
         android:id="@+id/icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@android:drawable/ic_dialog_alert" >
-    </ImageView>
+        android:layout_width="@dimen/draw_view_layout_width"
+        android:layout_height="@dimen/draw_view_layout_height">
+    </tng.fedorov.resources.DrawView>
 
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@+id/label"
-        android:textSize="30dp" >
+        android:textSize="@dimen/text_size" >
     </TextView>
 
 </LinearLayout>

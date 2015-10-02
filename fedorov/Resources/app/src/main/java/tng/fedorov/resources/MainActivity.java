@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] colornames = this.getResources().getStringArray(R.array.colornames);
+        String[] colornames = getResources().getStringArray(R.array.colornames);
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(new ColorArrayAdapter(this, android.R.layout.simple_list_item_1,
