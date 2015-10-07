@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,11 +13,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] colornames = getResources().getStringArray(R.array.colornames);
-
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(new ColorArrayAdapter(this, android.R.layout.simple_list_item_1,
-                colornames));
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction=fragmentManager.beginTransaction();
+        MainFragment fragment = new MainFragment();
+        transaction.add(R.id.fragmentContainer, fragment);
+        transaction.commit();
     }
 
     @Override
