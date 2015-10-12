@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+id/label"
+        android:textSize="@dimen/text_size"
+        android:gravity="end">
+    </TextView>
+
+    <tng.fedorov.resources.DrawView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/draw_view_layout_width"
+        android:layout_height="@dimen/draw_view_layout_height">
+    </tng.fedorov.resources.DrawView>
+
+</LinearLayout>

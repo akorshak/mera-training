@@ -1,14 +1,10 @@
 package tng.fedorov.resources;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -19,24 +15,55 @@ public class ColorArrayAdapter extends ArrayAdapter<String> {
     private final Context mContext;
     private final String[] mValues;
 
-    static class ViewHolder {
-        TextView text;
-        DrawView icon;
-    }
-
     public ColorArrayAdapter(Context context, int resource, String[] objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mValues = objects;
     }
 
+    static class ViewHolder {
+        TextView text;
+        DrawView icon;
+    }
+
+    public static enum ITEM_TYPE {
+        IN,
+        OUT
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return ITEM_TYPE.values().length;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if (position % 2 == 0) {
+            return ITEM_TYPE.IN.ordinal();
+        } else {
+            return ITEM_TYPE.OUT.ordinal();
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
+
+        ITEM_TYPE viewType = ITEM_TYPE.values()[getItemViewType(position)];
+
         ViewHolder viewHolder;
         if (convertView==null) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.rowlayout, viewGroup, false);
+
+            switch (viewType) {
+                case IN:
+                    convertView = inflater.inflate(R.layout.rowlayout1, viewGroup, false);
+                    break;
+                case OUT:
+                    convertView = inflater.inflate(R.layout.rowlayout2, viewGroup, false);
+                    break;
+            }
 
             viewHolder = new ViewHolder();
             viewHolder.icon = (DrawView) convertView.findViewById(R.id.icon);
