@@ -26,7 +26,7 @@ public class ColorArrayAdapter extends ArrayAdapter<String> {
         DrawView icon;
     }
 
-    public static enum ITEM_TYPE {
+    public enum ITEM_TYPE {
         IN,
         OUT
     }
@@ -50,21 +50,23 @@ public class ColorArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup viewGroup) {
 
         ITEM_TYPE viewType = ITEM_TYPE.values()[getItemViewType(position)];
-
+        int rowLayout=0;
         ViewHolder viewHolder;
+
         if (convertView==null) {
-            LayoutInflater inflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             switch (viewType) {
                 case IN:
-                    convertView = inflater.inflate(R.layout.rowlayout1, viewGroup, false);
+                    rowLayout = R.layout.rowlayout1;
                     break;
                 case OUT:
-                    convertView = inflater.inflate(R.layout.rowlayout2, viewGroup, false);
+                    rowLayout = R.layout.rowlayout2;
                     break;
             }
 
+            LayoutInflater inflater = (LayoutInflater) mContext
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(rowLayout, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.icon = (DrawView) convertView.findViewById(R.id.icon);
             viewHolder.text = (TextView) convertView.findViewById(R.id.label);
