@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ValCurs</string>
+    <string name="url_base">http://www.cbr.ru/scripts/XML_daily.asp?date_req=</string>
+    <string name="Load">Load</string>
+</resources>
