@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ContactsProvider</string>
+    <string name="change_email_str">Change email</string>
+</resources>
