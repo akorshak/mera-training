@@ -1,0 +1,55 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:alignmentMode="alignBounds"
+    android:background="#ffffffff"
+    android:columnCount="6"
+    android:columnOrderPreserved="false"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:useDefaultMargins="true">
+
+    <TextView
+        android:id="@+id/sender_textView"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|clip_horizontal"
+        android:text="@string/text_from"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sender_value_textView"
+        android:layout_width="0dp"
+        android:layout_columnSpan="4"
+        android:layout_gravity="start|fill"/>
+
+    <TextView
+        android:id="@+id/date_textView"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|clip_horizontal"
+        android:text="@string/text_date"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/date_value_textView"
+        android:layout_width="0dp"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill" />
+
+
+    <TextView
+        android:id="@+id/subject_textView"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|clip_horizontal"
+        android:text="@string/text_subject"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subject_value_textView"
+        android:layout_width="0dp"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill|start"/>
+
+</GridLayout>

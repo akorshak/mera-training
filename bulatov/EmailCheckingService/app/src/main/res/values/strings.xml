@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">EmailService</string>
+    <string name="login_field_hint">login</string>
+    <string name="password_field_hint">password</string>
+    <string name="go_button_text">go</string>
+
+    <string name="default_server_value">imap.yandex.ru</string>
+    <string name="default_port_value">993</string>
+    <string name="default_login_value">mera-training@yandex.ru</string>
+    <string name="default_password_value">qwerty1234</string>
+    <string name="default_period_value">10</string>
+    <string name="server_field_hint">server</string>
+    <string name="port_field_hint">port</string>
+    <string name="period_field_hint">period</string>
+    <string name="text_from">FROM:</string>
+    <string name="text_date">DATE:</string>
+    <string name="text_subject">SUBJECT:</string>
+
+</resources>
