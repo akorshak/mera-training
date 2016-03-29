@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MultimediaTest</string>
+    <string name="default_play_text">play</string>
+    <string name="default_stop_text">stop</string>
+    <string name="default_next_text">next</string>
+    <string name="default_prev_text">prev</string>
+    <string name="default_file_name">default file name</string>
+</resources>
