@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Navigator</string>
+    <string name="test">test</string>
+    <string name="load">load</string>
+    <string name="clear">clear</string>
+
+    <string name="a_marker_point">A</string>
+    <string name="b_marker_point">B</string>
+
+</resources>
