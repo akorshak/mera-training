@@ -30,14 +30,10 @@ import java.util.zip.ZipOutputStream;
 
 public class StartActivity extends Activity {
 
-    public static final String BUNDLE_SPECIES_ARRAY_KEY = "com.trainings.android.registrator.species_array";
-    private String[] speciesArray = {
-            "White crow","Black crow","Black raven"
-    };
+    public static final String BUNDLE_EMAIL_STRING = "com.trainings.android.registrator.email_string";
+    private String emailString = "mailto:aleros@mera.ru";
 
     private Button mButtonStart;
-
-    private int selectedPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +43,7 @@ public class StartActivity extends Activity {
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(
                     openFileInput("SpeciesPriority")));
-            String inputString;
-            String[] array = new String[speciesArray.length];
-            int i = 0;
-            while ((inputString = inputReader.readLine()) != null) {
-                array[i] = inputString;
-                i++;
-            }
-            speciesArray = array;
+            emailString = inputReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,7 +53,7 @@ public class StartActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Bundle b = new Bundle();
-                b.putStringArray(BUNDLE_SPECIES_ARRAY_KEY, speciesArray);
+                b.putString(BUNDLE_EMAIL_STRING, emailString);
                 Intent i = new Intent(StartActivity.this, RegistratorActivity.class);
                 i.putExtras(b);
                 startActivity(i);
@@ -75,16 +64,24 @@ public class StartActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        FileOutputStream fos = null;
         try {
-            FileOutputStream fos = openFileOutput("SpeciesPriority", Context.MODE_PRIVATE);
+            fos = openFileOutput("SpeciesPriority", Context.MODE_PRIVATE);
             String s;
-            for (int i = 0; i < speciesArray.length; i++) {
-                s = speciesArray[i] + "\n";
-                fos.write(s.getBytes());
-            }
+            s = emailString + "\n";
+            fos.write(s.getBytes());
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+    		if (fos != null) {
+            	try {
+		    		fos.flush();
+		    		fos.close();
+            	} catch (Exception e) {
+                    e.printStackTrace();
+                }
+    		}
         }
     }
 }
